@@ -1,15 +1,14 @@
 const router = require('express').Router();
-
 const bcrypt = require('bcryptjs');
 
-const Users = require('../users/users-model.js');
-
+const Users = require('../router/user-model.js');
 
 router.post('/register', (req, res) => {
-
     const user = req.body;
     
+    // this takes the req.body and creates the hash
     const hash = bcrypt.hashSync(user.password, 8);
+    // this takes the user password and assigns it to the hash. AKA, replaces the password with the hash. 
     user.password = hash;
 
     Users.add(user)
@@ -21,15 +20,12 @@ router.post('/register', (req, res) => {
         });
 });
 
-
 router.post('/login', (req, res) => {
     let { username, password } = req.body;
-
 
     Users.findBy({ username })
         .first()
         .then(user => {
-          
             if (user && bcrypt.compareSync(password, user.password)) {
                
                 req.session.user = username;

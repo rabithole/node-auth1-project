@@ -4,6 +4,7 @@ const express = require("express");
 const bcrypt = require('bcryptjs');
 
 const usersRouter = require("./router/user-router.js");
+const authRouter = require("./auth/auth-router.js");
 
 const server = express();
 
@@ -12,6 +13,7 @@ server.use(express.json());
 // server.use(cors());
 
 server.use("/api/user", usersRouter);
+server.use("/api/auth", authRouter);
 
 server.get("/", (req, res) => {
   res.json({ api: "up, down, up, down" });
