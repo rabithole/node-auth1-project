@@ -7,7 +7,6 @@ module.exports = {
       filename: './data/users.db3',
     }
   },
-
   migrations: {
     directory: './migrations'
   },

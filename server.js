@@ -3,7 +3,8 @@ const express = require("express");
 // const cors = require("cors");
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
-
+const restricted = require('./auth/restricted-middleware.js');
+// passing the session object above to the HOC below. 
 const knexSessionStore = require('connect-session-knex')(session);
 
 const usersRouter = require("./router/user-router.js");
@@ -22,6 +23,7 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: false,
 
+  // adds logged in persistance
   store: new knexSessionStore(
     {
       knex: require("./data/dbConfig.js"),
@@ -39,11 +41,9 @@ server.use(express.json());
 // server.use(cors());
 server.use(session(sessionConfig));
 
-const restricted = require('./auth/restricted-middleware.js');
-
 server.use(session(sessionConfig));
 
-server.use("/api/user", usersRouter);
+server.use("/api/user", restricted, usersRouter);
 server.use("/api/auth", authRouter);
 
 server.get("/", (req, res) => {

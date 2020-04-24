@@ -43,7 +43,6 @@ router.post('/login', (req, res) => {
 
 router.delete('/logout', (req, res) => {
     if (req.session) {
-       
         req.session.destroy((err) => {
             if (err) {
                 res.status(400).json({ message: 'error logging out:', error: err });
